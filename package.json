@@ -21,6 +21,7 @@
   "homepage": "https://github.com/nickedwards109/market-data-volatility-server#readme",
   "dependencies": {
     "bufferutil": "3.0.2",
+    "express": "4.16.2",
     "utf-8-validate": "3.0.3",
     "ws": "3.2.0"
   }
