@@ -7,8 +7,10 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
+const INDEX = path.join(__dirname, 'index.html');
 
 const server = express()
+  .use((request, response) => {response.sendFile(INDEX)})
   .listen(PORT, () => console.log(`Listening on port ${PORT}`))
 
 const webSocketClient = new WebSocket(apiUrl, {
