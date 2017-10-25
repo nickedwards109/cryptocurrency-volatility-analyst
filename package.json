@@ -1,0 +1,22 @@
+{
+  "name": "market-data-volatility-server",
+  "version": "1.0.0",
+  "description": "A websocket server that sends real-time BTCUSD historical volatility data",
+  "main": "server.js",
+  "engines": {
+    "node": "6.2.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickedwards109/market-data-volatility-server.git"
+  },
+  "author": "Nick Edwards",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickedwards109/market-data-volatility-server/issues"
+  },
+  "homepage": "https://github.com/nickedwards109/market-data-volatility-server#readme"
+}
