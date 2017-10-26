@@ -1,3 +1,3 @@
-const apiUrl = 'ws://api.hitbtc.com:80';
+const apiUrl = 'wss://api.bitfinex.com/ws/2';
 
 module.exports = apiUrl;
