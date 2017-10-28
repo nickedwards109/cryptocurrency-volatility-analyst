@@ -1,6 +1,6 @@
 const TRADES_COLLECTION = 'trades';
 
-export default class Trade {
+class Trade {
   static handleMessage(rawMessage) {
     const trade = Trade.parseMessage(rawMessage);
     if (!!trade.tradePrice && !!trade.timeStamp) {
@@ -47,3 +47,5 @@ export default class Trade {
     });
   }
 }
+
+module.exports = Trade;
