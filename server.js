@@ -34,21 +34,25 @@ mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
     .listen(PORT, () => console.log(`Listening on port ${PORT}`));
 })
 
+// Create a WebSocket client which will connect with a streaming endpoint
 const webSocketClient = new WebSocket(apiUrl, {
   perMessageDeflate: false
 });
 
+// Indicate what channel of the streaming endpoint to subscribe to
 let subscriptionMessage = JSON.stringify({
   event: 'subscribe',
   channel: 'trades',
   symbol: 'tBTCUSD'
 });
 
+// When the WebSocket connection is opened, subscribe to the specified channel
 webSocketClient.on('open', () => {
   console.log('Connection opened!');
   webSocketClient.send(subscriptionMessage);
 });
 
+// When the streaming endpoint sends a message over the WebSocket connection, do something with it!
 webSocketClient.on('message', (data) => {
   console.log(data);
 });
