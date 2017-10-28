@@ -8,6 +8,7 @@ const WebSocket = require('ws');
 const path = require('path');
 const mongodb = require('mongodb');
 
+const TRADES_COLLECTION = 'trades';
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
@@ -53,6 +54,35 @@ webSocketClient.on('open', () => {
 });
 
 // When the streaming endpoint sends a message over the WebSocket connection, do something with it!
-webSocketClient.on('message', (data) => {
-  console.log(data);
+webSocketClient.on('message', (rawMessage) => {
+  // Deserialize the message string
+  const message = JSON.parse(rawMessage)
+
+  // If it represents a trade that was executed...
+  if (message[1] === "te") {
+
+    // Get the trade price
+    const tradeDatum = message[2];
+    const tradePrice = tradeDatum[3];
+
+    // Get the timestamp (an integer representing milliseconds in the Unix epoch)
+    const timeStamp = tradeDatum[1];
+
+    const trade = { tradePrice: tradePrice, timeStamp: timeStamp };
+
+    db.collection(TRADES_COLLECTION).insertOne(trade, (err, doc) => {
+      if (err) {
+        console.log('There was an error inserting the trade into the database.')
+        console.log(err)
+      } else {
+        console.log('Inserted a trade into the database.')
+        console.log(doc.ops[0])
+        // This logs a message that looks something like:
+        // Inserted a trade into the database.
+        // { tradePrice: 5710.1,
+        //   timeStamp: 1509215064,
+        //   _id: 59f4cb581f6f7c4c29957f56 }
+      }
+    });
+  }
 });
