@@ -1,7 +1,7 @@
 const TRADES_COLLECTION = 'trades';
 
 class Trade {
-  static handleMessage(rawMessage) {
+  static handleMessage(rawMessage, db) {
     const trade = Trade.parseMessage(rawMessage);
     if (!!trade.tradePrice && !!trade.timeStamp) {
       Trade.insert(trade, db);

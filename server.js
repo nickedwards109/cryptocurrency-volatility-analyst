@@ -58,5 +58,5 @@ webSocketClient.on('open', () => {
 // hand over the message to the Trade class, where it will parse the message
 // and insert a trade object into the database.
 webSocketClient.on('message', rawMessage => {
-  Trade.handleMessage(rawMessage);
+  Trade.handleMessage(rawMessage, db);
 });
