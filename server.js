@@ -2,13 +2,13 @@
 
 const apiUrl = require('./config/apiUrl');
 const mongoDbUri = process.env.MONGODB_URI;
+const Trade = require('./models/Trade');
 
 const express = require('express');
 const WebSocket = require('ws');
 const path = require('path');
 const mongodb = require('mongodb');
 
-const TRADES_COLLECTION = 'trades';
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
@@ -69,20 +69,6 @@ webSocketClient.on('message', (rawMessage) => {
     const timeStamp = tradeDatum[1];
 
     const trade = { tradePrice: tradePrice, timeStamp: timeStamp };
-
-    db.collection(TRADES_COLLECTION).insertOne(trade, (err, doc) => {
-      if (err) {
-        console.log('There was an error inserting the trade into the database.')
-        console.log(err)
-      } else {
-        console.log('Inserted a trade into the database.')
-        console.log(doc.ops[0])
-        // This logs a message that looks something like:
-        // Inserted a trade into the database.
-        // { tradePrice: 5710.1,
-        //   timeStamp: 1509215064,
-        //   _id: 59f4cb581f6f7c4c29957f56 }
-      }
-    });
+    Trade.insert(trade, db);
   }
 });
