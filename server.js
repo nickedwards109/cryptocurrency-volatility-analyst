@@ -12,7 +12,8 @@ const mongodb = require('mongodb');
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
-// Create a database variable outside of the database connetion callback in order to reuse the connection pool.
+// Create a database variable outside of the database connetion callback
+// in order to reuse the connection pool.
 let db;
 
 // Create an Express server
@@ -53,22 +54,9 @@ webSocketClient.on('open', () => {
   webSocketClient.send(subscriptionMessage);
 });
 
-// When the streaming endpoint sends a message over the WebSocket connection, do something with it!
-webSocketClient.on('message', (rawMessage) => {
-  // Deserialize the message string
-  const message = JSON.parse(rawMessage)
-
-  // If it represents a trade that was executed...
-  if (message[1] === "te") {
-
-    // Get the trade price
-    const tradeDatum = message[2];
-    const tradePrice = tradeDatum[3];
-
-    // Get the timestamp (an integer representing milliseconds in the Unix epoch)
-    const timeStamp = tradeDatum[1];
-
-    const trade = { tradePrice: tradePrice, timeStamp: timeStamp };
-    Trade.insert(trade, db);
-  }
+// When the streaming endpoint sends a message over the WebSocket connection,
+// hand over the message to the Trade class, where it will parse the message
+// and insert a trade object into the database.
+webSocketClient.on('message', rawMessage => {
+  Trade.handleMessage(rawMessage);
 });
