@@ -1,6 +1,6 @@
 'use strict';
 
-const apiUrl = require('./config/apiUrl');
+const streamingEndpoint = require('./config/streaming_endpoint');
 const mongoDbUri = process.env.MONGODB_URI;
 const Trade = require('./models/Trade');
 
@@ -37,7 +37,7 @@ mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
 })
 
 // Create a WebSocket client which will connect with a streaming endpoint
-const webSocketClient = new WebSocket(apiUrl, {
+const webSocketClient = new WebSocket(streamingEndpoint, {
   perMessageDeflate: false
 });
 

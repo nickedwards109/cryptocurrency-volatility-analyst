@@ -2,7 +2,7 @@ const mongodb = require('mongodb');
 const mongoDbUri = require('../secrets/testDatabaseUri');
 const { expect } = require('chai');
 const Trade = require('../models/Trade');
-const TRADES_COLLECTION = 'trades';
+const TRADES_COLLECTION = require('../config/trade_db_collection');
 
 describe('Interacting with the trades database', () => {
   let db;

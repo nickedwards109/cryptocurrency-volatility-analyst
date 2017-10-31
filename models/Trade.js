@@ -1,4 +1,4 @@
-const TRADES_COLLECTION = 'trades';
+const TRADES_COLLECTION = require('../config/trade_db_collection');
 
 class Trade {
   constructor(args) {
