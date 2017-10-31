@@ -1,6 +1,11 @@
 const TRADES_COLLECTION = 'trades';
 
 class Trade {
+  constructor(args) {
+    this.tradePrice = args.tradePrice;
+    this.timeStamp = args.timeStamp;
+  }
+
   static handleMessage(rawMessage, db) {
     const trade = Trade.parseMessage(rawMessage);
     if (!!trade.tradePrice && !!trade.timeStamp) {
@@ -12,25 +17,16 @@ class Trade {
   }
 
   static parseMessage(rawMessage) {
-    // Deserialize the message string
     const message = JSON.parse(rawMessage);
-
-    let tradeObject = {};
-
+    let tradePrice, timeStamp;
     // If the message represents a trade that was executed...
     if (message[1] === "te") {
-
-      // Get the trade price
+      // Get the trade price and timeStamp (an integer representing seconds in the Unix epoch)
       const tradeDatum = message[2];
-      const tradePrice = tradeDatum[3];
-
-      // Get the timestamp (an integer representing milliseconds in the Unix epoch)
-      const timeStamp = tradeDatum[1];
-
-      tradeObject.tradePrice = tradePrice;
-      tradeObject.timeStamp = timeStamp;
+      tradePrice = tradeDatum[3];
+      timeStamp = tradeDatum[1] / 1000;
     }
-    return tradeObject;
+    return new Trade({tradePrice: tradePrice, timeStamp: timeStamp});
   }
 
   static insert(trade, db) {
