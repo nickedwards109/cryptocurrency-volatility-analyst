@@ -4,7 +4,10 @@ class Trade {
   static handleMessage(rawMessage, db) {
     const trade = Trade.parseMessage(rawMessage);
     if (!!trade.tradePrice && !!trade.timeStamp) {
-      Trade.insert(trade, db);
+      Trade.insert(trade, db)
+      .then(() => {
+        console.log('Hello from the callback that is executed after a trade is inserted')
+      });
     }
   }
 
@@ -31,19 +34,19 @@ class Trade {
   }
 
   static insert(trade, db) {
-    db.collection(TRADES_COLLECTION).insertOne(trade, (err, doc) => {
-      if (err) {
-        console.log('There was an error inserting the trade into the database.')
-        console.log(err)
-      } else {
-        console.log('Inserted a trade into the database.')
-        console.log(doc.ops[0])
-        // This logs a message that looks something like:
-        // Inserted a trade into the database.
-        // { tradePrice: 5710.1,
-        //   timeStamp: 1509215064,
-        //   _id: 59f4cb581f6f7c4c29957f56 }
-      }
+    return new Promise((resolve, reject) => {
+      db.collection(TRADES_COLLECTION).insertOne(trade, (err, doc) => {
+        if (err) {
+          console.log('There was an error inserting the trade into the database.');
+          console.log(err)
+          reject(err);
+        } else {
+          const createdTrade = doc.ops[0];
+          console.log('Inserted a trade into the database.');
+          console.log(createdTrade);
+          resolve(createdTrade);
+        }
+      });
     });
   }
 }
