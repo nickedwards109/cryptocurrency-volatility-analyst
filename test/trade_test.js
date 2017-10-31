@@ -19,13 +19,13 @@ describe('Interacting with the trades database', () => {
   });
 
   it('inserts a trade into the database', (done) => {
-    const trade = { tradePrice: 6323.7, timeStamp: 1509458089 };
+    const trade = { price: 6323.7, timeStamp: 1509458089 };
     db.collection(TRADES_COLLECTION).count()
     .then((count) => {
       const initialCount = count;
       Trade.insert(trade, db)
       .then((newTrade) => {
-        expect(newTrade.tradePrice).to.equal(6323.7);
+        expect(newTrade.price).to.equal(6323.7);
         expect(newTrade.timeStamp).to.equal(1509458089);
         db.collection(TRADES_COLLECTION).count()
         .then((count) => {

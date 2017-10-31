@@ -2,13 +2,13 @@ const TRADES_COLLECTION = require('../config/trade_db_collection');
 
 class Trade {
   constructor(args) {
-    this.tradePrice = args.tradePrice;
+    this.price = args.price;
     this.timeStamp = args.timeStamp;
   }
 
   static handleMessage(rawMessage, db) {
     const trade = Trade.parseMessage(rawMessage);
-    if (!!trade.tradePrice && !!trade.timeStamp) {
+    if (!!trade.price && !!trade.timeStamp) {
       Trade.insert(trade, db)
       .then(() => {
         console.log('Hello from the callback that is executed after a trade is inserted')
@@ -18,15 +18,15 @@ class Trade {
 
   static parseMessage(rawMessage) {
     const message = JSON.parse(rawMessage);
-    let tradePrice, timeStamp;
+    let price, timeStamp;
     // If the message represents a trade that was executed...
     if (message[1] === "te") {
       // Get the trade price and timeStamp (an integer representing seconds in the Unix epoch)
       const tradeDatum = message[2];
-      tradePrice = tradeDatum[3];
+      price = tradeDatum[3];
       timeStamp = tradeDatum[1] / 1000;
     }
-    return new Trade({tradePrice: tradePrice, timeStamp: timeStamp});
+    return new Trade({price: price, timeStamp: timeStamp});
   }
 
   static insert(trade, db) {
