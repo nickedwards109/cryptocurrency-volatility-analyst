@@ -14,6 +14,9 @@ describe('Interacting with the trades database', () => {
         console.log(err);
       }
       db = database;
+
+      // Start with an empty database for each test
+      db.collection(TRADES_COLLECTION).drop();
       done();
     });
   });
@@ -30,7 +33,7 @@ describe('Interacting with the trades database', () => {
         db.collection(TRADES_COLLECTION).count()
         .then((count) => {
           const afterCount = count;
-          expect(afterCount).to.eql(initialCount + 1)
+          expect(afterCount).to.eql(initialCount + 1);
           done();
         });
       });
