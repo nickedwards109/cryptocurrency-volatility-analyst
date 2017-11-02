@@ -1,5 +1,8 @@
+const mongodb = require('mongodb');
+const mongoDbUri = require('../secrets/testDatabaseUri');
 const { expect } = require('chai');
 const RateOfReturn = require('../models/RateOfReturn');
+const RATES_OF_RETURN_COLLECTION = require('../config/db_collections').ratesOfReturn;
 
 describe('Rates of return', () => {
   it('calculates the instantaneous rate of return', () => {
@@ -25,3 +28,44 @@ describe('Rates of return', () => {
     expect(negativeReturn.rate).to.equal(-0.005);
   });
 });
+
+describe('Interacting with the rate of return database', () => {
+  let db;
+
+  beforeEach((done) => {
+    mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
+      if (err) {
+        console.log('There was an error connecting to the database.');
+        console.log(err);
+      }
+      db = database;
+
+      // Start with an empty database for each test
+      db.collection(RATES_OF_RETURN_COLLECTION).drop();
+      done();
+    });
+  });
+
+  it('inserts a rate of return into the database', (done) => {
+    const initialTrade = { price: 100, timeStamp: 1500000000 };
+    const finalTrade = { price: 105, timeStamp: 1500000010 };
+    const rateOfReturn = new RateOfReturn({
+      initialTrade: initialTrade,
+      finalTrade: finalTrade
+    })
+    db.collection(RATES_OF_RETURN_COLLECTION).count()
+    .then((count) => {
+      const initialCount = count;
+      RateOfReturn.insert(rateOfReturn, db)
+      .then((newRateOfReturn) => {
+        expect(newRateOfReturn.rate).to.equal(0.005);
+        db.collection(RATES_OF_RETURN_COLLECTION).count()
+        .then((count) => {
+          const afterCount = count;
+          expect(afterCount).to.eql(initialCount + 1);
+          done();
+        });
+      });
+    });
+  });
+})

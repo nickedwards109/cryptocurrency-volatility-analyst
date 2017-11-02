@@ -1,4 +1,5 @@
-const TRADES_COLLECTION = require('../config/trade_db_collection');
+const RateOfReturn = require('./RateOfReturn');
+const TRADES_COLLECTION = require('../config/db_collections').trades;
 
 class Trade {
   constructor(args) {
