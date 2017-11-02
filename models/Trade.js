@@ -45,6 +45,18 @@ class Trade {
       });
     });
   }
+
+  static rateOfReturn(tradePair) {
+    const initialPrice = tradePair.initialTrade.price;
+    const finalPrice = tradePair.finalTrade.price;
+    const priceChangePercentage = (finalPrice - initialPrice) / initialPrice;
+
+    const initialTimeStamp = tradePair.initialTrade.timeStamp;
+    const finalTimeStamp = tradePair.finalTrade.timeStamp;
+    const intervalSeconds = finalTimeStamp - initialTimeStamp;
+
+    return (priceChangePercentage / intervalSeconds);
+  }
 }
 
 module.exports = Trade;
