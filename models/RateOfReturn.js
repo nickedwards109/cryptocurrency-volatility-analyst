@@ -30,6 +30,27 @@ class RateOfReturn {
       });
     });
   }
+
+  static getTrailing(args) {
+    const hours = args.hours;
+    const db = args.db;
+    const nowTime = Math.floor(Date.now() / 1000);
+    const trailingTimeLimit = nowTime - hours*60*60;
+    return new Promise((resolve, reject) => {
+      db.collection(RATES_OF_RETURN_COLLECTION).find(
+        { timeStamp: { $gt: trailingTimeLimit } }
+      )
+      .toArray((err, results) => {
+        if (err) {
+          console.log('There was an error getting trailing returns from the database.');
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(results)
+        }
+      });
+    })
+  }
 }
 
 module.exports = RateOfReturn;
