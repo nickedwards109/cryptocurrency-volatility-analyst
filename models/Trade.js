@@ -8,12 +8,47 @@ class Trade {
   }
 
   static handleMessage(rawMessage, db) {
-    const trade = Trade.parseMessage(rawMessage);
-    if (!!trade.price && !!trade.timeStamp) {
-      Trade.insert(trade, db)
-      .then(() => {
-        console.log('Hello from the callback that is executed after a trade is inserted')
-      });
+    const newTrade = Trade.parseMessage(rawMessage);
+    if (!!newTrade.price && !!newTrade.timeStamp) {
+        // Get an earlier trade in order to compare with the new trade to
+        //  calculate a rate of return, and delete the earlier trade from the
+        //  database because it will not be needed again.
+        // In the case where many new trades arrive with the same timestamp,
+        //  we might not be able to find any trades with a lesser timestamp
+        //  than a given one of those. The new trades will still be inserted
+        //  into the database, but a new rate of return will not be calculated.
+        //  Initially, this will cause the database count to grow in size, but
+        //  the growth will reduce as a pool of earlier trades becomes available
+        //  in the database. This means a couple of things:
+        //    1. The rate of return is not necessarily calculated between
+        //       adjacent trades, but sometimes is calculated across a time
+        //       period spanning multiple trades.
+        //    2. A few trade data points will not be included in the aggregate
+        //       calculation of standard deviation of many rates of return. This
+        //       slightly reduces the accuracy of the calculation. Once this is
+        //       in production, we should be able to measure that inaccuracy
+        //       by comparing the number of ignored data points to the total
+        //       number of data points.
+        db.collection(TRADES_COLLECTION)
+        .findOneAndDelete({ timeStamp: { $lt: newTrade.timeStamp } })
+        .then((oldTrade) => {
+          return new RateOfReturn({
+            initialTrade: oldTrade.value,
+            finalTrade: newTrade
+          });
+        })
+        .then((rateOfReturn) => {
+          return RateOfReturn.insert(rateOfReturn, db)
+        })
+        .then(() => {
+          // The new trade will be needed in the database for calculating a
+          // rate of return later, but we do not need to wait for the database
+          // insertion to finish before sending a calculated result as a
+          // message across the WebSocket server
+          Trade.insert(newTrade, db);
+
+          // Next task is to analyze the aggregate rate of return data
+        });
     }
   }
 
