@@ -11,6 +11,7 @@ class RateOfReturn {
     const intervalSeconds = finalTimeStamp - initialTimeStamp;
 
     this.rate = (priceChangePercentage / intervalSeconds);
+    this.timeStamp = finalTimeStamp;
   }
 
   static insert(rateOfReturn, db) {
