@@ -1,19 +1,11 @@
-const TRADES_COLLECTION = require('../config/trade_db_collection');
+const RateOfReturn = require('./RateOfReturn');
+const Statistics = require('../lib/Statistics');
+const TRADES_COLLECTION = require('../config/db_collections').trades;
 
 class Trade {
   constructor(args) {
     this.price = args.price;
     this.timeStamp = args.timeStamp;
-  }
-
-  static handleMessage(rawMessage, db) {
-    const trade = Trade.parseMessage(rawMessage);
-    if (!!trade.price && !!trade.timeStamp) {
-      Trade.insert(trade, db)
-      .then(() => {
-        console.log('Hello from the callback that is executed after a trade is inserted')
-      });
-    }
   }
 
   static parseMessage(rawMessage) {
@@ -44,6 +36,18 @@ class Trade {
         }
       });
     });
+  }
+
+  static rateOfReturn(tradePair) {
+    const initialPrice = tradePair.initialTrade.price;
+    const finalPrice = tradePair.finalTrade.price;
+    const priceChangePercentage = (finalPrice - initialPrice) / initialPrice;
+
+    const initialTimeStamp = tradePair.initialTrade.timeStamp;
+    const finalTimeStamp = tradePair.finalTrade.timeStamp;
+    const intervalSeconds = finalTimeStamp - initialTimeStamp;
+
+    return (priceChangePercentage / intervalSeconds);
   }
 }
 
