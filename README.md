@@ -1,9 +1,11 @@
 This application analyzes cryptocurrency trade data in real-time in order to provide real-time data on cryptocurrency volatility, which can be useful for traders who want to make decisions based on changes in volatility. Technologies in this project include Node, Express, WebSockets, and MongoDB.
 
 Here's what the application does:
+
 The server connects to the Bitfinex WebSocket API. When Bitfinex broadcasts a message indicating a new BTCUSD trade, the server compares it to an earlier trade in order to calculate a rate of return between those trades. A custom statistics library analyzes the trailing 24 hours of rate of return calculations to find the standard deviation, which indicates how much the rate of return has varied over that time period. This represents the volatility. That volatility calculation is then broadcasted over a WebSocket connection to any connected clients.
 
 Here's how to set it up:
+
 1. Open up a terminal and clone the repo with 'git clone git@github.com:nickedwards109/cryptocurrency-volatility-server.git'
 2. Sign up for cloud database services with MLab:
      - Visit www.mlab.com
@@ -28,7 +30,7 @@ Here's how to set it up:
 5. Configure your database connection string:
      - Find the text on the page that says: 'To connect using a driver via the standard MongoDB URI'
      - Copy the string underneath that to your clipboard
-     - In a text editor, replace <dbuser> with your user name and <dbpassword> with your password
+     - In a text editor, replace \<dbuser> with your user name and \<dbpassword> with your password
 6. Start the server:
      - Run:
      MONGODB_URI=<string from step 5> node server.js
