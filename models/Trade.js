@@ -1,6 +1,5 @@
-const RateOfReturn = require('./RateOfReturn');
 const Statistics = require('../lib/Statistics');
-const TRADES_COLLECTION = require('../config/db_collections').trades;
+const TRADES_COLLECTION = require('../config/db_collections');
 
 class Trade {
   constructor(args) {
@@ -30,24 +29,16 @@ class Trade {
           reject(err);
         } else {
           const createdTrade = doc.ops[0];
-          console.log('Inserted a trade into the database.');
-          console.log(createdTrade);
           resolve(createdTrade);
         }
       });
     });
   }
 
-  static rateOfReturn(tradePair) {
-    const initialPrice = tradePair.initialTrade.price;
-    const finalPrice = tradePair.finalTrade.price;
-    const priceChangePercentage = (finalPrice - initialPrice) / initialPrice;
-
-    const initialTimeStamp = tradePair.initialTrade.timeStamp;
-    const finalTimeStamp = tradePair.finalTrade.timeStamp;
-    const intervalSeconds = finalTimeStamp - initialTimeStamp;
-
-    return (priceChangePercentage / intervalSeconds);
+  static getPrices(trades) {
+    return trades.map((trade) => {
+      return trade.price;
+    });
   }
 }
 

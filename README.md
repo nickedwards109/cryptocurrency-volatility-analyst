@@ -1,8 +1,8 @@
-This application analyzes cryptocurrency trade data in real-time in order to provide real-time data on cryptocurrency volatility, which can be useful for traders who want to make decisions based on changes in volatility. Technologies in this project include Node, Express, WebSockets, and MongoDB.
+This application analyzes cryptocurrency trade data and provides real-time calculations of price volatility, which can be useful for traders who want to make decisions based on changes in volatility. Technologies in this project include Node, Express, WebSockets, and MongoDB.
 
 Here's what the application does:
 
-The server connects to the Bitfinex WebSocket API. When Bitfinex broadcasts a message indicating a new BTCUSD trade, the server compares it to an earlier trade in order to calculate a rate of return between those trades. A custom statistics library analyzes the trailing 24 hours of rate of return calculations to find the standard deviation, which indicates how much the rate of return has varied over that time period. This represents the volatility. That volatility calculation is then broadcasted over a WebSocket connection to any connected clients.
+The application acts as a WebSocket client and connects to the Bitfinex WebSocket API. When Bitfinex broadcasts a message indicating a new BTCUSD trade, the application inserts the price and time of the trade into a database. The application then retrieves the prices of every trade that has happened within the last 5 minutes. A custom statistics library calculates the standard deviation of that set of prices. This represents the price volatility. The application acts as a WebSocket server and broadcasts the price volatility to any connected clients.
 
 Here's how to set it up:
 
@@ -31,12 +31,12 @@ Here's how to set it up:
      - Find the text on the page that says: 'To connect using a driver via the standard MongoDB URI'
      - Copy the string underneath that to your clipboard
      - In a text editor, replace \<dbuser> with your user name and \<dbpassword> with your password
-6. Start the server:
-     - Run:
+6. Run the application. Run:
      MONGODB_URI=<string from step 5> node server.js
-7. Connect a WebSocket client to your local server
+7. Let the application run for at least 5 minutes. During this time, the application will be collecting trade price information from BitFinex and inserting it into the database. The database needs to contain at least 5 minutes of historical price data in order to analyze the volatility over the trailing 5 minute time period.
+8. Connect a WebSocket client to your local server:
      - Open a new terminal window
-     - From the new terminal window, install the command-line WebSocket tool 'wscat' by running 'npm install -g wscat'
-     - Establish a WebSocket connection to your local server by running 'wscat -c ws://localhost:3000'
+     - In the new terminal window, install the command-line WebSocket tool 'wscat' by running 'npm install -g wscat'
+     - Establish a WebSocket connection to the application by running 'wscat -c ws://localhost:3000'
 
-Whenever a new BTC/USD trade happens on the Bitfinex exchange, you should now see an object appearing in your terminal that represents the volatility of rates of return over the trailing 24 hours before the trade happened.
+Whenever a new BTC/USD trade happens on the BitFinex exchange, you should see an object appear in your terminal that represents the price volatility over the trailing 5 minutes before the trade happened.
