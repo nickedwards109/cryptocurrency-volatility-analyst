@@ -1,5 +1,5 @@
 const mongodb = require('mongodb');
-const mongoDbUri = require('../secrets/testDatabaseUri');
+const mongoDbUri = process.env.MONGODB_URI;
 const { expect } = require('chai');
 const Trade = require('../models/Trade');
 const TRADES_COLLECTION = require('../config/db_collections');
