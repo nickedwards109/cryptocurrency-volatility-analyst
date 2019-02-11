@@ -1,8 +1,8 @@
 ## Overview
-Cryptocurrency Volatility Analyst is a software application that provides real-time calculations that indicate how much the market price of Bitcoin has varied during a recent trailing time period. The application listens for data that represents new trades on Bitfinex, a Bitcoin exchange. Each time a trade happens, the application calculates and displays the standard deviation of trade prices over the previous 5 minutes, which is a measure of how much the prices varied over that time period. Traders often refer to this metric as the 'price volatility'. This metric can be useful for traders who want to consider Bitcoin's price volatility in their trading decisions.
+Cryptocurrency Volatility Analyst is a software application that provides real-time calculations that indicate how much the market price of Bitcoin has varied during a recent trailing time period. The application listens for data that represents new trades on Bitfinex, a Bitcoin exchange. Each time a trade happens, the application calculates and displays the standard deviation of trade prices over the previous 5 minutes, which is a measure of how much the prices varied during that time period. Traders often refer to this metric as the 'price volatility'. This metric can be useful for traders who want to consider Bitcoin's price volatility in their trading decisions.
 
 ## Relevance of price volatility
-Price volatility is a quantitative metric of how much an asset's price varies, which is a proxy for the risk associated with investing in that asset. This metric is relevant to traders who seek to allocate their capital among different assets in a manner that is appropriate for their own tolerance for risk.
+Price volatility is a quantitative metric of how much an asset's price varies, and it serves as a proxy for the risk associated with investing in that asset. This metric is relevant to traders who seek to allocate their capital among different assets in a manner that is appropriate for their own tolerance for risk.
 
 For example, a trader who has a high tolerance for risk might allocate a high proportion of their capital in an asset whose price is highly volatile. This would enable the high-risk trader to try to buy low, hold the asset for a short time period, and sell it for a higher price soon thereafter. Alternatively, a trader who has a low tolerance for risk might allocate more of their capital in a more stable asset whose price doesn't vary significantly.
 
@@ -86,4 +86,4 @@ To run the tests, follow steps 1, 2, 3, 4, and 5 of the technical guide for buil
 Passing tests will be indicated by text in green, and failing tests will be indicated by text in red. All tests are passing as of the current version on 2/10/19.
 
 ## Contributing
-The source code and a list of outstanding issues is available at [the source code repository](https://github.com/nickedwards109/cryptocurrency-volatility-analyst). Anyone is welcome to add new issues, and anyone is welcome to fork the source code, make changes, and make a pull request.
+The source code and a list of outstanding issues are available at [the source code repository](https://github.com/nickedwards109/cryptocurrency-volatility-analyst). Anyone is welcome to add new issues, and anyone is welcome to fork the source code, make changes, and make a pull request.
