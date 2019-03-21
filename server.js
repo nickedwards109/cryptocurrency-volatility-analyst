@@ -74,6 +74,10 @@ mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
         webSocketServer.clients.forEach((client) => {
           client.send(volatilityMessage);
         });
+      })
+      .then(() => {
+        database.collection(TRADES_COLLECTION)
+        .remove({ timeStamp: { $lt: fiveMinutesAgo } });
       });
     });
     }
