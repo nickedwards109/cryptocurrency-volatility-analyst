@@ -64,7 +64,7 @@ mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
     Trade.insert(newTrade, database)
     .then((trade) => {
       const now = trade.timeStamp;
-      const fiveMinutesAgo = now - 300000;
+      const fiveMinutesAgo = now - 300;
       database.collection(TRADES_COLLECTION)
       .find({ timeStamp: { $gt: fiveMinutesAgo } }).toArray()
       .then((trailingTrades) => {
