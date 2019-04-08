@@ -28,7 +28,7 @@ class App extends Component {
             Market Price: <strong>{this.state.marketPrice}</strong><br/>
             Volatility: <strong>{this.state.volatility}</strong>
 
-            <Websocket url='ws://localhost:3000'
+            <Websocket url='ws://ec2-18-224-65-104.us-east-2.compute.amazonaws.com:8080'
                 onMessage={this.handleWebSocketMessage.bind(this)}/>
           </div>
         );
