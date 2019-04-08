@@ -11,7 +11,7 @@ const SocketServer = require('ws').Server;
 const path = require('path');
 const mongodb = require('mongodb');
 
-const PORT = process.env.PORT || 3000;
+const PORT = 80;
 const INDEX = path.join(__dirname, 'index.html');
 const TRADES_COLLECTION = require('./config/db_collections');
 
