@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Websocket from 'react-websocket';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+      constructor(props) {
+        super(props);
+        this.state = {
+          volatility: 0
+        };
+      }
+
+      handleWebSocketMessage(rawData) {
+        let data = JSON.parse(rawData);
+        let volatility = data.volatility;
+          this.setState({ volatility: volatility });
+      }
+
+      render() {
+        return (
+          <div>
+            Volatility: <strong>{this.state.volatility}</strong>
+
+            <Websocket url='ws://localhost:3000'
+                onMessage={this.handleWebSocketMessage.bind(this)}/>
+          </div>
+        );
+      }
 }
 
 export default App;
