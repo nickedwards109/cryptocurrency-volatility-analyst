@@ -70,9 +70,12 @@ mongodb.MongoClient.connect(mongoDbUri, (err, database) => {
       .then((trailingTrades) => {
         const trailingPrices = Trade.getPrices(trailingTrades);
         const volatility = Statistics.standardDeviation(trailingPrices);
-        const volatilityMessage = JSON.stringify({ volatility: "$" + volatility });
+        const outputMessage = JSON.stringify({
+          marketPrice: "$" + newTrade.price,
+          volatility: "$" + volatility
+        });
         webSocketServer.clients.forEach((client) => {
-          client.send(volatilityMessage);
+          client.send(outputMessage);
         });
       })
       .then(() => {
